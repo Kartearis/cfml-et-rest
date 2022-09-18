@@ -122,7 +122,7 @@
         )
         VALUES (
           <cfqueryparam value="#shortDescription#" cfsqltype="cf_sql_varchar">,
-          <cfqueryparam value="#description#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#description#" cfsqltype="cf_sql_longvarchar">,
           <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">,
           <cfqueryparam value="#stateNew#" cfsqltype="cf_sql_integer">,
           <cfqueryparam value="#level_id#" cfsqltype="cf_sql_integer">,
@@ -140,17 +140,37 @@
     <cfreturn resObj>
   </cffunction>
 
-  <cffunction name="updateError" access="public" output="false" hint="Update error" returntype="boolean">
-    <cfargument name="errorId" required="true" type="numeric" />
+  <cffunction name="updateError" access="public" output="false" hint="Update error" returntype="struct">
+    <cfargument name="id" required="true" type="numeric" />
     <cfargument name="shortDescription" required="true" type="string" />
     <cfargument name="description" required="true" type="string" />
-    <cfargument name="state" required="true" type="string" />
-    <cfargument name="level" required="true" type="string" />
-    <cfargument name="urgency" required="true" type="string" />
-    <cfset returnArray = ArrayNew(1) />
+    <cfargument name="state_id" required="true" type="numeric" />
+    <cfargument name="level_id" required="true" type="numeric" />
+    <cfargument name="urgency_id" required="true" type="numeric" />
+
+    <!--- Should check if combination of oldState & newState is allowed. Not implemented for simplicity --->
+
     <cfset var resObj = {}>
-    <cfset resObj["data"] = SerializeJSON(returnArray)>
-    <cfreturn true>
+    <cftry>
+    <cfquery datasource="db" name="updateError">
+      UPDATE defects
+      SET short_description = <cfqueryparam value="#shortDescription#" cfsqltype="cf_sql_varchar">,
+          description = <cfqueryparam value="#description#" cfsqltype="cf_sql_longvarchar">,
+          state_id = <cfqueryparam value="#state_id#" cfsqltype="cf_sql_integer">,
+          level_id = <cfqueryparam value="#level_id#" cfsqltype="cf_sql_integer">,
+          urgency_id = <cfqueryparam value="#urgency_id#" cfsqltype="cf_sql_integer">
+      WHERE id = <cfqueryparam value="#id#" cfsqltype="cf_sql_integer">
+    </cfquery>
+    <cfcatch type="database">
+      <cfset resObj["status"] = false>
+      <cfset resObj["message"] = "Could not update defect">
+      <cfreturn resObj>
+    </cfcatch>
+    </cftry>
+    <cfset resObj["status"] = true>
+    <cfset resObj["data"] = SerializeJSON(id)>
+
+    <cfreturn resObj>
   </cffunction>
 
 </cfcomponent>

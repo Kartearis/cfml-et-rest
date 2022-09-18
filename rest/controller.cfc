@@ -192,21 +192,28 @@
     <cfset restSetResponse(response) />
   </cffunction>
 
-  <cffunction name="updateerror" restpath="errors/{id}" access="remote" returntype="void" httpmethod="PATCH" produces="application/json">
+  <cffunction name="updateerror" restpath="errors/{id}" access="remote" returntype="void" httpmethod="POST" produces="application/json">
     <cfargument name="id" type="any" required="yes" restargsource="path"/>
+    <cfargument name="description" type="any" required="yes" restargsource="form"/>
+    <cfargument name="shortDescription" type="any" required="yes" restargsource="form"/>
+    <cfargument name="state_id" type="any" required="yes" restargsource="form"/>
+    <cfargument name="level_id" type="any" required="yes" restargsource="form"/>
+    <cfargument name="urgency_id" type="any" required="yes" restargsource="form"/>
+
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
     <cfif not verify.success>
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset res = objErrors.updateError(id, "1","2","3","4","5")>
-      <cfif res eq true>
+      <!--- <cfset res = {status:true}> --->
+      <cfset res = objErrors.updateError(id, shortDescription, description, state_id, level_id, urgency_id) >
+      <cfif res.status eq true>
         <cfset response.status = 200>
-        <cfset response.content = "Ok">
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status = 422>
-        <cfset response.content = "Could not update error">
+        <cfset response.content = res.message>
       </cfif>
     </cfif>
 
@@ -221,7 +228,7 @@
         <cfset response.status=401>
         <cfset response.content = verify.message>
       <cfelse>
-        <cfset response.content = objHistory.getErrorHistory(id)>
+        <cfset response.content = objHistory.getErrorHistory(id).data>
       </cfif>
 
     <cfset restSetResponse(response) />
@@ -229,19 +236,22 @@
 
   <cffunction name="appendhistory" restpath="errors/{id}/history" access="remote" returntype="void" httpmethod="POST" produces="application/json">
     <cfargument name="id" type="any" required="yes" restargsource="path"/>
+    <cfargument name="action" type="any" required="yes" restargsource="form"/>
+    <cfargument name="comment" type="any" required="yes" restargsource="form"/>
+
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
     <cfif not verify.success>
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset res = objHistory.appendErrorHistory(id, 1, "2")>
-      <cfif res eq true>
+      <cfset res = objHistory.appendErrorHistory(id, action, comment)>
+      <cfif res.status eq true>
         <cfset response.status = 201>
-        <cfset response.content = "Ok">
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status = 422>
-        <cfset response.content = "Could not update error">
+        <cfset response.content = res.message>
       </cfif>
     </cfif>
 
