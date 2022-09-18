@@ -32,16 +32,20 @@
 
   <!--- User Login--->
   <cffunction name="login" restpath="auth/login" access="remote" returntype="void" httpmethod="POST" produces="application/json">
-
-    <!-- Can use restargsource="query" to get login/password from query -->
-    <!-- currently structform is all http body of request -->
-    <cfargument name="structform" type="any" required="yes">
+    <cfargument name="login" type="any" required="yes" restargsource="query">
+    <cfargument name="password" type="any" required="yes" restargsource="query">
 
     <cfset var response = {status: 200, content: ""}>
-    <cfset response.content = objAuth.loginUser("login", "password")>
+    <cfset res = objAuth.loginUser(login, password)>
+    <cfif res.status eq true>
+      <cfset response.status = 200>
+      <cfset response.content = res>
+    <cfelse>
+      <cfset response.status = 422>
+      <cfset response.content = res.message>
+    </cfif>
 
     <cfset restSetResponse(response) />
-
   </cffunction>
 
   <cffunction name="getuser" restpath="users/{id}" access="remote" returntype="void" httpmethod="GET" produces="application/json">
