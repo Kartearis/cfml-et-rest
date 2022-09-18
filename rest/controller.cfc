@@ -44,7 +44,6 @@
 
   </cffunction>
 
-  <!--- User specific functions --->
   <cffunction name="getuser" restpath="users/{id}" access="remote" returntype="void" httpmethod="GET" produces="application/json">
 
     <cfargument name="id" type="any" required="yes" restargsource="path"/>
@@ -55,7 +54,13 @@
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset response.content = objUsers.getUser(arguments.id)>
+      <cfset res = objUsers.getUser(id)>
+      <cfif res.status eq true>
+        <cfset response.content = res>
+      <cfelse>
+        <cfset response.status=404>
+        <cfset response.content = res.message>
+      </cfif>
     </cfif>
 
     <cfset restSetResponse(response) />
@@ -76,6 +81,10 @@
   </cffunction>
 
   <cffunction name="createuser" restpath="users" access="remote" returntype="void" httpmethod="POST" produces="application/json">
+    <cfargument name="name" type="any" required="yes" restargsource="query"/>
+    <cfargument name="surname" type="any" required="yes" restargsource="query"/>
+    <cfargument name="login" type="any" required="yes" restargsource="query"/>
+    <cfargument name="password" type="any" required="yes" restargsource="query"/>
 
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
@@ -83,10 +92,10 @@
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset res = objUsers.createUser("1","2","3","4")>
-      <cfif res eq true>
+      <cfset res = objUsers.createUser(name, surname, login, password)>
+      <cfif res.status eq true>
         <cfset response.status = 201>
-        <cfset response.content = "Ok">
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status = 422>
         <cfset response.content = "Could not create user">
@@ -98,16 +107,19 @@
 
   <cffunction name="updateuser" restpath="users/{id}" access="remote" returntype="void" httpmethod="PATCH" produces="application/json">
     <cfargument name="id" type="any" required="yes" restargsource="path"/>
+    <cfargument name="name" type="any" required="yes" restargsource="query"/>
+    <cfargument name="surname" type="any" required="yes" restargsource="query"/>
+
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
     <cfif not verify.success>
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset res = objUsers.updateUser(id, "1", "2")>
-      <cfif res eq true>
+      <cfset res = objUsers.updateUser(id, name, surname)>
+      <cfif res.status eq true>
         <cfset response.status = 200>
-        <cfset response.content = "Ok">
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status = 422>
         <cfset response.content = "Could not update user">
