@@ -2,6 +2,7 @@
 <cfcomponent hint="Error specific functions" displayname="errors">
 
   <cfobject name="objUsers" component="users">
+  <cfobject name="objHistory" component="history">
 
   <cffunction name="buildError" access="private" output="false" returntype="struct">
     <cfargument name="query" required="true" type="query" />
@@ -135,8 +136,17 @@
         <cfreturn resObj>
       </cfcatch>
     </cftry>
-    <cfset resObj["status"] = true>
-    <cfset resObj["errorId"] = SerializeJSON(result.GENERATEDKEY)>
+
+    <!--- Add entry to history (should be inside transaction)--->
+    <cfset defectCreatedAction = 1>
+    <cfset res = objHistory.appendErrorHistory(result.GENERATEDKEY, defectCreatedAction, "Defect created")>
+    <cfif res.status eq true>
+      <cfset resObj["status"] = true>
+      <cfset resObj["errorId"] = SerializeJSON(result.GENERATEDKEY)>
+    <cfelse>
+      <cfset resObj["status"] = false>
+      <cfset resObj["message"] = "Failed to create history entry">
+    </cfif>
     <cfreturn resObj>
   </cffunction>
 
@@ -147,6 +157,8 @@
     <cfargument name="state_id" required="true" type="numeric" />
     <cfargument name="level_id" required="true" type="numeric" />
     <cfargument name="urgency_id" required="true" type="numeric" />
+    <!-- Comment required: no update is possible without it -->
+    <cfargument name="comment" required="true" type="string" />
 
     <!--- Should check if combination of oldState & newState is allowed. Not implemented for simplicity --->
 
@@ -167,8 +179,17 @@
       <cfreturn resObj>
     </cfcatch>
     </cftry>
-    <cfset resObj["status"] = true>
-    <cfset resObj["data"] = SerializeJSON(id)>
+
+    <!--- Add entry to history. Defect actions have same ids to corresponding states --->
+    <cfset defectAction = state_id>
+    <cfset res = objHistory.appendErrorHistory(id, defectAction, comment)>
+    <cfif res.status eq true>
+      <cfset resObj["status"] = true>
+      <cfset resObj["errorId"] = SerializeJSON(id)>
+    <cfelse>
+      <cfset resObj["status"] = false>
+      <cfset resObj["message"] = "Failed to create history entry">
+    </cfif>
 
     <cfreturn resObj>
   </cffunction>

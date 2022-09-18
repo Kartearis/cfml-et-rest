@@ -16,6 +16,8 @@
         users.id as userId,
         users.name,
         users.surname,
+        dict_history_action.id as action_id,
+        dict_history_action.name as action_name,
         comment
       FROM defect_history
         INNER JOIN users ON users.id = defect_history.user_id
@@ -31,6 +33,10 @@
           "id": #userId#,
           "name": #name#,
           "surname": #surname#
+        },
+        "action": {
+          "id": #action_id#,
+          "name": #action_name#
         }
       }) />
     </cfloop>

@@ -199,6 +199,7 @@
     <cfargument name="state_id" type="any" required="yes" restargsource="form"/>
     <cfargument name="level_id" type="any" required="yes" restargsource="form"/>
     <cfargument name="urgency_id" type="any" required="yes" restargsource="form"/>
+    <cfargument name="comment" type="any" required="yes" restargsource="form"/>
 
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
@@ -207,7 +208,7 @@
       <cfset response.content = verify.message>
     <cfelse>
       <!--- <cfset res = {status:true}> --->
-      <cfset res = objErrors.updateError(id, shortDescription, description, state_id, level_id, urgency_id) >
+      <cfset res = objErrors.updateError(id, shortDescription, description, state_id, level_id, urgency_id, comment) >
       <cfif res.status eq true>
         <cfset response.status = 200>
         <cfset response.content = res>
