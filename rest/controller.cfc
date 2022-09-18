@@ -134,7 +134,6 @@
   </cffunction>
 
   <cffunction name="geterrors" restpath="errors" access="remote" returntype="void" httpmethod="GET" produces="application/json">
-
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
     <cfif not verify.success>
@@ -156,7 +155,13 @@
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset response.content = objErrors.getError(id)>
+      <cfset res = objErrors.getError(id)>
+      <cfif res.status eq true>
+        <cfset response.content = res>
+      <cfelse>
+        <cfset response.status=404>
+        <cfset response.content = res.message>
+      </cfif>
     </cfif>
 
     <cfset restSetResponse(response) />
