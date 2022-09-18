@@ -1,6 +1,13 @@
 
 <cfcomponent hint="User specific functions" displayname="users">
 
+  <cffunction name="getCurrentUserId" access="public" output="false" returntype="numeric">
+    <cfargument name="token" required="true" type="string">
+
+    <cfset jwt = new jwt(Application.jwtkey)>
+    <cfset userId = jwt.decode(token).userId>
+    <cfreturn userId>
+  </cffunction>
 
   <!--- User Details --->
   <cffunction name="getUser" access="public" output="false" hint="Get user details" returntype="struct">
@@ -14,10 +21,6 @@
       WHERE id = <cfqueryparam value="#id#" cfsqltype="cf_sql_integer">
       LIMIT 1
     </cfquery>
-
-    <!--- <cfset token = GetHttpRequestData().Headers.authorization>
-    <cfset jwt = new jwt(Application.jwtkey)>
-    <cfset userId = jwt.decode(token).userId> --->
 
     <cfif not usersById.recordCount> <!--- if user not found --->
       <cfset resObj["status"] = false>

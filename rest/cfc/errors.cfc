@@ -1,6 +1,8 @@
 
 <cfcomponent hint="Error specific functions" displayname="errors">
 
+  <cfobject name="objUsers" component="users">
+
   <cffunction name="buildError" access="private" output="false" returntype="struct">
     <cfargument name="query" required="true" type="query" />
 
@@ -97,16 +99,45 @@
     <cfreturn SerializeJSON(returnArray)>
   </cffunction>
 
-  <cffunction name="createError" access="public" output="false" hint="Create error" returntype="boolean">
+  <cffunction name="createError" access="public" output="false" hint="Create error" returntype="struct">
     <cfargument name="shortDescription" required="true" type="string" />
     <cfargument name="description" required="true" type="string" />
-    <cfargument name="state" required="true" type="string" />
-    <cfargument name="level" required="true" type="string" />
-    <cfargument name="urgency" required="true" type="string" />
-    <cfset returnArray = ArrayNew(1) />
+    <cfargument name="level_id" required="true" type="numeric" />
+    <cfargument name="urgency_id" required="true" type="numeric" />
+
     <cfset var resObj = {}>
-    <cfset resObj["data"] = SerializeJSON(returnArray)>
-    <cfreturn true>
+
+    <cfset token = GetHttpRequestData().Headers.authorization>
+    <cfset userId = objUsers.getCurrentUserId(token)>
+    <cfset stateNew = 1>
+    <cftry>
+      <cfquery datasource="db" name="createError" result="result">
+        INSERT INTO defects (
+          short_description,
+          description,
+          created_by,
+          state_id,
+          level_id,
+          urgency_id
+        )
+        VALUES (
+          <cfqueryparam value="#shortDescription#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#description#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">,
+          <cfqueryparam value="#stateNew#" cfsqltype="cf_sql_integer">,
+          <cfqueryparam value="#level_id#" cfsqltype="cf_sql_integer">,
+          <cfqueryparam value="#urgency_id#" cfsqltype="cf_sql_integer">
+        )
+      </cfquery>
+      <cfcatch type="database">
+        <cfset resObj["status"] = false>
+        <cfset resObj["message"] = "Could not add error. Maybe some id error?">
+        <cfreturn resObj>
+      </cfcatch>
+    </cftry>
+    <cfset resObj["status"] = true>
+    <cfset resObj["errorId"] = SerializeJSON(result.GENERATEDKEY)>
+    <cfreturn resObj>
   </cffunction>
 
   <cffunction name="updateError" access="public" output="false" hint="Update error" returntype="boolean">

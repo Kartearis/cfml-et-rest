@@ -60,7 +60,7 @@
     <cfelse>
       <cfset res = objUsers.getUser(id)>
       <cfif res.status eq true>
-        <cfset response.content = res.data>
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status=404>
         <cfset response.content = res.message>
@@ -168,6 +168,10 @@
   </cffunction>
 
   <cffunction name="createError" restpath="errors" access="remote" returntype="void" httpmethod="POST" produces="application/json">
+    <cfargument name="shortDescription" type="any" required="yes" restargsource="form"/>
+    <cfargument name="description" type="any" required="yes" restargsource="form"/>
+    <cfargument name="level_id" type="any" required="yes" restargsource="form"/>
+    <cfargument name="urgency_id" type="any" required="yes" restargsource="form"/>
 
     <cfset var response = {status: 200, content: ""}>
     <cfset verify = authenticate()>
@@ -175,13 +179,13 @@
       <cfset response.status=401>
       <cfset response.content = verify.message>
     <cfelse>
-      <cfset res = objErrors.createError("1","2","3","4","5")>
-      <cfif res eq true>
+      <cfset res = objErrors.createError(shortDescription, description, level_id, urgency_id)>
+      <cfif res.status eq true>
         <cfset response.status = 201>
-        <cfset response.content = "Ok">
+        <cfset response.content = res>
       <cfelse>
         <cfset response.status = 422>
-        <cfset response.content = "Could not create error">
+        <cfset response.content = res.message>
       </cfif>
     </cfif>
 
