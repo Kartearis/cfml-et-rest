@@ -27,6 +27,7 @@
 
         <cfset resObj["status"] = true>
         <cfset resObj["token"] = token>
+        <cfset resObj["id"] = userLogin.id>
       <cfelse>
         <cfset resObj["status"] = false>
         <cfset resObj["message"] = "Incorrect password">

@@ -60,7 +60,7 @@
     <cfelse>
       <cfset res = objUsers.getUser(id)>
       <cfif res.status eq true>
-        <cfset response.content = res>
+        <cfset response.content = res.data>
       <cfelse>
         <cfset response.status=404>
         <cfset response.content = res.message>

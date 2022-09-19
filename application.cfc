@@ -18,5 +18,9 @@
         <cfset onApplicationStart()>
       </cflock>
     </cfif>
+
+    <cfheader name="Access-Control-Allow-Origin" value="*">
+    <cfheader name="Access-Control-Allow-Methods" value="*">
+    <cfheader name="Access-Control-Allow-Headers" value="*">
   </cffunction>
 </cfcomponent>
