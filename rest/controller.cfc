@@ -4,6 +4,7 @@
   <cfobject name="objAuth" component="cfc.auth">
   <cfobject name="objErrors" component="cfc.errors">
   <cfobject name="objHistory" component="cfc.history">
+  <cfobject name="objDicts" component="cfc.dicts">
 
   <!--- Function to validate token--->
   <cffunction name="authenticate" returntype="any">
@@ -255,6 +256,48 @@
         <cfset response.content = res.message>
       </cfif>
     </cfif>
+
+    <cfset restSetResponse(response) />
+  </cffunction>
+
+  <cffunction name="getstates" restpath="dicts/states" access="remote" returntype="void" httpmethod="GET" produces="application/json">
+
+    <cfset var response = {status: 200, content: ""}>
+    <cfset verify = authenticate()>
+      <cfif not verify.success>
+        <cfset response.status=401>
+        <cfset response.content = verify.message>
+      <cfelse>
+        <cfset response.content = objDicts.getStates()>
+      </cfif>
+
+    <cfset restSetResponse(response) />
+  </cffunction>
+
+  <cffunction name="getlevels" restpath="dicts/levels" access="remote" returntype="void" httpmethod="GET" produces="application/json">
+
+    <cfset var response = {status: 200, content: ""}>
+    <cfset verify = authenticate()>
+      <cfif not verify.success>
+        <cfset response.status=401>
+        <cfset response.content = verify.message>
+      <cfelse>
+        <cfset response.content = objDicts.getLevels()>
+      </cfif>
+
+    <cfset restSetResponse(response) />
+  </cffunction>
+
+  <cffunction name="geturgencies" restpath="dicts/urgency" access="remote" returntype="void" httpmethod="GET" produces="application/json">
+
+    <cfset var response = {status: 200, content: ""}>
+    <cfset verify = authenticate()>
+      <cfif not verify.success>
+        <cfset response.status=401>
+        <cfset response.content = verify.message>
+      <cfelse>
+        <cfset response.content = objDicts.getUrgency()>
+      </cfif>
 
     <cfset restSetResponse(response) />
   </cffunction>
