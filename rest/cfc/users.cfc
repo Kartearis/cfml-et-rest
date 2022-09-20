@@ -37,11 +37,11 @@
 
     <cfset returnArray = ArrayNew(1) />
     <cfquery name="users" datasource="db">
-      SELECT name, surname, login FROM users
+      SELECT id, name, surname, login FROM users
     </cfquery>
     <cfloop query="users">
-      <cfset ArrayAppend(returnArray, {"name": #name#, "surname": #surname#, "login": #login#}) />
-    </cfloop>
+      <cfset ArrayAppend(returnArray, {"id": #id#, "name": #name#, "surname": #surname#, "login": #login#}) />
+""    </cfloop>
 
     <cfreturn SerializeJSON(returnArray)>
   </cffunction>
