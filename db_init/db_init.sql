@@ -206,6 +206,15 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+INSERT INTO `users` (`id`, `name`, `surname`, `login`, `password_hash`)
+VALUES (
+  1,
+  "Админ",
+  "Админ",
+  "admin",
+  "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+);
+
 --
 -- Dumping data for table `users`
 --
