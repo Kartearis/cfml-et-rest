@@ -1,0 +1,682 @@
+{
+	"info": {
+		"_postman_id": "70101176-2d48-42e5-8a30-228d1c4fac39",
+		"name": "CFML",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4735303"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/users/:userId",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/users/?name=John&surname=Doe&login=user1&password=password1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								},
+								{
+									"key": "surname",
+									"value": "Doe"
+								},
+								{
+									"key": "login",
+									"value": "user1"
+								},
+								{
+									"key": "password",
+									"value": "password1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/users/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/users/{{userId}}?name=John&surname=Doe",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"users",
+								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John"
+								},
+								{
+									"key": "surname",
+									"value": "Doe"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"pm.environment.set('token', responseData.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/auth/login?login=user1&password=password1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "user1"
+								},
+								{
+									"key": "password",
+									"value": "password1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/auth/logout",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Errors",
+			"item": [
+				{
+					"name": "Get errors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get error",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/:errorId",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								":errorId"
+							],
+							"variable": [
+								{
+									"key": "errorId",
+									"value": "{{errorId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create error",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "shortDescription",
+									"value": "Test description",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Long description",
+									"type": "text"
+								},
+								{
+									"key": "level_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "urgency_id",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update error",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "shortDescription",
+									"value": "qwe",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "qwe",
+									"type": "text"
+								},
+								{
+									"key": "state_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "level_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "urgency_id",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/:errorId",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								":errorId"
+							],
+							"variable": [
+								{
+									"key": "errorId",
+									"value": "{{errorId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error history",
+			"item": [
+				{
+					"name": "Get error history",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/:errorId/history",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								":errorId",
+								"history"
+							],
+							"variable": [
+								{
+									"key": "errorId",
+									"value": "{{errorId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add entry to error history",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "comment",
+									"value": "BlahBlahBlah",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/errors/:errorId/history",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"errors",
+								":errorId",
+								"history"
+							],
+							"variable": [
+								{
+									"key": "errorId",
+									"value": "{{errorId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dicts",
+			"item": [
+				{
+					"name": "Get states",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/dicts/states",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"dicts",
+								"states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get defect levels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/dicts/levels",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"dicts",
+								"levels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get defect urgencies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/dicts/urgency",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"dicts",
+								"urgency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get history actions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1/rest/controller/dicts/history-actions",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rest",
+								"controller",
+								"dicts",
+								"history-actions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
